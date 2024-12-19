@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, ImageBackground } from "react-native";
+import { Text, View, StyleSheet, ImageBackground, Pressable } from "react-native";
 import { Link } from 'expo-router';
 
 export default function Index() {
@@ -11,17 +11,28 @@ export default function Index() {
       }}
     >
       <Text>Hello</Text>
-      <Link href ="/DummyScreen" style={styles.link}>DummyScreen</Link>
+      <Link href ="/DummyScreen" style={{ marginHorizontal: 'auto'}} asChild>
+        <Pressable style={styles.button}>
+          <Text style={styles.buttonText}>DummyScreen</Text>
+        </Pressable>
+      </Link>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  link: {
+  buttonText: {
     color: 'white',
-    fontSize: 42,
+    fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    padding: 4,
+  },
+  button: {
+    height: 60,
+    borderRadius: 20,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.75)',
+    padding: 6,
   }
 })
