@@ -1,8 +1,26 @@
+
+import React, { useState } from 'react'
+import { ScrollView, Text, TextInput, View, StyleSheet } from "react-native";
+import RecipeController from "./RecipeController";
+
+// TODO: make it functional with dynamic queries, most likely have to delay api call 300ms or something after user hits enter
+// - otherwise can use a button to serve as a middle man 
+
+const Index = () => {
+  const [query, setQuery] = useState('')
+
 import { Text, View, StyleSheet, ImageBackground, Pressable } from "react-native";
 import { Link } from 'expo-router';
 
-export default function Index() {
+
   return (
+
+    <View>
+      <TextInput style={styles.input} placeholder="search" onChangeText={setQuery} value={query}/>
+      <ScrollView>
+        <RecipeController searchQuery={"beef"} />
+      </ScrollView>
+
     <View
       style={{
         flex: 1,
@@ -16,9 +34,26 @@ export default function Index() {
           <Text style={styles.buttonText}>DummyScreen</Text>
         </Pressable>
       </Link>
+
     </View>
   );
 }
+
+const styles = StyleSheet.create(
+ {
+  input: {
+    height: 40, 
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    margin: 10,
+  }
+ }
+);
+
+
+export default Index
 
 const styles = StyleSheet.create({
   buttonText: {
