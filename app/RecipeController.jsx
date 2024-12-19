@@ -1,29 +1,61 @@
-import React, { useEffect } from 'react';
-import { Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import LoadingWheel from './components/loadingWheel';
+import { View, Text, Image } from 'react-native';
 
-export default async function RecipeController (searchQuery) {
-    useEffect(() => {
-        const data = async () => {
-            if(typeof searchQuery === "string") {const searchQuery = searchQuery}
 
-            const url = "www.themealdb.com/api/json/v1/1/filter.php?i=" + searchQuery;
 
-            try {
-                const response = await fetch(url);
+export default function RecipeController ({searchQuery}) {
+    const [recipes, setRecipes] = useState([]); // initialized to empty array to hold recipes, setRecipes will update and add to recipes
+    const [loading, setLoading] = useState(true); // initialized to true since at start it will be loading, on compleation of API call, it will be toggled
+    const [error, setError] = useState(null); // state to monitor error of api call
 
-                if(!response.meals) {
-                    throw new Error('ERROR: Unable to fetch from URL: ${url}');
-                }
+    const url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchQuery}`;
 
-                const recipe = await response.json();
-                console.log(recipe);
-            } catch(error) {
-                console.error(error);
+    const fetchRecipes = async () => {
+        try {
+            const response = await axios.get(url);
+            
+            if (response.data.meals) {
+                setRecipes(response.data.meals);
+            } else {
+                setError(`No recipes found for: ${searchQuery}`)
             }
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false); // Api call has finished and thus loading is set to false
         }
-    });
+    };
+
+    useEffect(() => {
+        fetchRecipes();
+    }, [searchQuery]);
+
+    if (loading) {return <LoadingWheel />}
+
+    if (error) {
+        return (
+            <View> 
+                <Text>
+                    Error: {error}
+                </Text>
+            </View>
+        );
+    }
 
     return(
-        0
+        <View>
+            {
+                recipes.map((recipe) => (
+                    <View key={recipe.idMeal}> 
+                       <Image source={{uri: recipe.strMealThumb}} style={{width:100, height:100}} />
+                        <Text>
+                            {recipe.strMeal}
+                        </Text> 
+                    </View>
+                ))
+            }
+        </View>
     );
 }
