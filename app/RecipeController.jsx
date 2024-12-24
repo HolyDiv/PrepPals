@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import LoadingWheel from './components/loadingWheel';
-import { View, Text, Image } from 'react-native';
+import { View, Text } from 'react-native';
 import RecipeSearchWidget from './components/RecipeSearchWidget';
 
 
@@ -10,7 +10,7 @@ const RecipeController  = ({searchQuery}) => {
     const [loading, setLoading] = useState(true) // initialized to true since at start it will be loading, on compleation of API call, it will be toggled
     const [error, setError] = useState(null) // state to monitor error of api call
 
-    const url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchQuery}`;
+    const url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchQuery}`
 
     const fetchRecipes = async () => {
         try {
@@ -26,7 +26,7 @@ const RecipeController  = ({searchQuery}) => {
         } finally {
             setLoading(false) // Api call has finished and thus loading is set to false
         }
-    };
+    }
 
     useEffect(() => {
         fetchRecipes()
